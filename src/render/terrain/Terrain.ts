@@ -84,7 +84,7 @@ export class Terrain {
       uDetail: { value: 1 },
       uGrid: { value: new THREE.Vector2(t.w, t.h) },
     };
-    this.template = new THREE.MeshStandardMaterial({ roughness: 0.96, metalness: 0, color: 0xffffff, side: THREE.DoubleSide });
+    this.template = new THREE.MeshStandardMaterial({ roughness: 0.96, metalness: 0, color: 0xffffff });
     this.source.onLoad = () => (this.dirty = true);
     this.buildRoots();
     this.buildBackdrop();
@@ -246,7 +246,7 @@ export class Terrain {
         k++;
       }
     // Skirts hang below the edge vertices to hide LOD cracks.
-    const skirt = Math.max(0.05, w * 0.02);
+    const skirt = Math.max(0.15, w * 0.04);
     const edge = edgeIndices();
     for (let e = 0; e < edge.length; e++) {
       const src = edge[e];
@@ -582,7 +582,8 @@ function gridIndex(): THREE.BufferAttribute {
     const b = edge[e + 1];
     const as = base + e;
     const bs = base + e + 1;
-    idx.push(a, as, b, b, as, bs);
+    // Wound to face outward: a skirt is only ever seen from outside its tile.
+    idx.push(a, b, as, b, bs, as);
   }
   _index = new THREE.BufferAttribute(new Uint32Array(idx), 1);
   return _index;
