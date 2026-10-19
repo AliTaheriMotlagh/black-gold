@@ -80,6 +80,7 @@ export class Terrain {
       uFog: { value: this.fogTex },
       uTerritory: { value: this.territoryTex },
       uTerritoryAlpha: { value: 0 },
+      uPolitical: { value: 0 },
       uTime: { value: 0 },
       uDetail: { value: 1 },
       uGrid: { value: new THREE.Vector2(t.w, t.h) },
@@ -608,9 +609,23 @@ uniform vec2 uGrid;
 uniform sampler2D uFog;
 uniform sampler2D uTerritory;
 uniform float uTerritoryAlpha;
+uniform float uPolitical;
+uniform float uTime;
 uniform float uDetail;
 float fowK = 1.0;
+vec3 seaCol = vec3(0.0);
+float seaK = 0.0;
 float hash12(vec2 p) { vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+float terrDiff(vec4 a, vec2 uv) { vec4 b = texture2D(uTerritory, uv); return step(0.03, dot(abs(a - b), vec4(1.0))); }
+float terrEdge(vec4 c, vec2 uv, vec2 o) {
+  return max(max(terrDiff(c, uv + vec2(o.x, 0.0)), terrDiff(c, uv - vec2(o.x, 0.0))), max(terrDiff(c, uv + vec2(0.0, o.y)), terrDiff(c, uv - vec2(0.0, o.y))));
+}
+// Fraction of 8 neighbours at radius o that differ: a soft halo instead of a stair-stepped band.
+float terrGlow(vec4 c, vec2 uv, vec2 o) {
+  vec2 d = o * 0.7071;
+  return (terrDiff(c, uv + vec2(o.x, 0.0)) + terrDiff(c, uv - vec2(o.x, 0.0)) + terrDiff(c, uv + vec2(0.0, o.y)) + terrDiff(c, uv - vec2(0.0, o.y))
+    + terrDiff(c, uv + d) + terrDiff(c, uv - d) + terrDiff(c, uv + vec2(d.x, -d.y)) + terrDiff(c, uv + vec2(-d.x, d.y))) * 0.125;
+}
 float vnoise(vec2 p) { vec2 i = floor(p); vec2 f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
   return mix(mix(hash12(i), hash12(i + vec2(1.0, 0.0)), u.x), mix(hash12(i + vec2(0.0, 1.0)), hash12(i + vec2(1.0, 1.0)), u.x), u.y); }
 `,
@@ -630,14 +645,44 @@ if (fade > 0.001) {
 }
 // Political tint (strategic zoom); occupied land is hatched.
 vec4 terr = texture2D(uTerritory, wuv);
-if (terr.a > 0.01 && uTerritoryAlpha > 0.001) {
-  float hatch = terr.a < 0.75 ? step(0.5, fract((vWorldPos.x + vWorldPos.z) / max(1.0, camD * 0.012))) : 1.0;
-  col = mix(col, terr.rgb, uTerritoryAlpha * (0.55 + 0.45 * hatch));
+float hatch = terr.a < 0.75 ? step(0.5, fract((vWorldPos.x + vWorldPos.z) / max(1.0, camD * 0.012))) : 1.0;
+if (terr.a > 0.01 && uTerritoryAlpha > 0.001) col = mix(col, terr.rgb, uTerritoryAlpha * (0.55 + 0.45 * hatch));
+// War-room map: muted relief, flat nation colours, lit borders; selected nation (a=250) pulses gold,
+// rivals (a=245) get a red rim.
+if (uPolitical > 0.001) {
+  float lum = dot(col, vec3(0.299, 0.587, 0.114));
+  vec2 px = max(vec2(1.0), vec2(camD * 0.0006)) / uGrid;
+  float e1 = terrEdge(terr, wuv, px);
+  float e2 = max(e1, terrGlow(terr, wuv, px * 2.5) * 1.6);
+  float e3 = max(e2 * 0.8, terrGlow(terr, wuv, px * 5.0) * 1.4);
+  // a == 0 is sea (only drawn here while the water mesh is hidden); a tiny alpha is land
+  // that belongs to no nation.
+  vec3 war = vec3(lum) * vec3(0.32, 0.36, 0.42);
+  if (terr.a < 0.002) {
+    vec2 g = abs(fract(vWorldPos.xz / 250.0) - 0.5) / fwidth(vWorldPos.xz / 250.0);
+    float grid = 1.0 - min(min(g.x, g.y), 1.0);
+    // Painted after lighting (unlit) so sea-floor relief and tile seams don't show through.
+    seaCol = vec3(0.04, 0.085, 0.13) + vec3(0.03, 0.07, 0.09) * grid;
+    seaCol = mix(seaCol, vec3(0.1, 0.24, 0.32), e3 * 0.45 + e2 * 0.3);
+    seaCol = mix(seaCol, vec3(0.75, 0.85, 0.9), e1 * 0.6);
+    seaK = uPolitical;
+  } else if (terr.a > 0.01) {
+    float a8 = terr.a * 255.0;
+    float sel = 1.0 - step(1.5, abs(a8 - 250.0));
+    float riv = 1.0 - step(1.5, abs(a8 - 245.0));
+    war = terr.rgb * (0.38 + 1.05 * lum) * (0.7 + 0.3 * hatch);
+    war = mix(war, war * 0.55, e2 * (1.0 - e1));
+    war = mix(war, vec3(0.92, 0.95, 1.0), e1 * 0.75);
+    float pulse = 0.65 + 0.35 * sin(uTime * 3.2);
+    war = mix(war, vec3(1.0, 0.82, 0.3), sel * (e1 + e2 * 0.6 + e3 * 0.25 * pulse) * 0.85);
+    war = mix(war, vec3(1.0, 0.25, 0.2), riv * e2 * 0.8);
+  }
+  col = mix(col, war, uPolitical);
 }
 // Fog of war: unexplored is near-black, explored-but-unseen is dim.
 float fv = texture2D(uFog, wuv).r;
 fowK = mix(0.4, 1.0, smoothstep(0.05, 0.45, fv)) * mix(0.72, 1.0, smoothstep(0.55, 0.95, fv));
 diffuseColor.rgb *= col;`,
     )
-    .replace('#include <fog_fragment>', 'gl_FragColor.rgb *= fowK;\n#include <fog_fragment>');
+    .replace('#include <fog_fragment>', 'gl_FragColor.rgb = mix(gl_FragColor.rgb, seaCol, seaK) * fowK;\n#include <fog_fragment>');
 }

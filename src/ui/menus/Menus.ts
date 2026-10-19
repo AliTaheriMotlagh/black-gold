@@ -271,7 +271,7 @@ export class Menus {
     this.show(
       h(
         'div',
-        { class: 'screen', style: 'pointer-events:none' },
+        { class: 'screen setup-screen', style: 'pointer-events:none' },
         h(
           'div',
           { class: 'setup' },

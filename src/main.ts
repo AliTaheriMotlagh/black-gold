@@ -112,6 +112,7 @@ class App {
     this.settings.lang = l;
     saveSettings(this.settings);
     this.game?.layers.buildLabels();
+    this.menuMap.relabel();
     this.game?.hud.refresh();
   }
 

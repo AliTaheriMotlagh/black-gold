@@ -44,9 +44,18 @@ export class World3D {
     // Political tint fades in as you zoom out to the strategic map.
     const strat = THREE.MathUtils.smoothstep(this.rig.dist, 80, 400);
     this.terrain.shared.uTerritoryAlpha.value = strat * 0.32 + this.politicalBoost * 0.3;
+    // Stylized war-room map: forced on by the menus, and eased in at strategic zoom in-game.
+    const war = Math.max(this.warMap, strat * 0.9);
+    this.warMapK += (war - this.warMapK) * Math.min(1, dt * 5);
+    this.terrain.shared.uPolitical.value = this.warMapK;
+    // The war map paints its own stylized sea in the terrain shader.
+    this.water.group.visible = this.warMapK < 0.6;
   }
 
   politicalBoost = 0;
+  /** 0..1 — muted relief, flat nation colours, lit borders (see Terrain shader). */
+  warMap = 0;
+  private warMapK = 0;
 
   render(dt: number) {
     this.stage.render(dt);

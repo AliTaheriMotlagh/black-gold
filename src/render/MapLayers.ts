@@ -182,7 +182,7 @@ export class MapLayers {
       const r = th.region[i];
       const owner = r >= 0 ? w.cities[r].owner : th.country[i];
       if (!owner) {
-        data[o + 3] = 0;
+        data[o + 3] = 1; // unclaimed land (0 is reserved for sea)
         continue;
       }
       const c = cols[owner];

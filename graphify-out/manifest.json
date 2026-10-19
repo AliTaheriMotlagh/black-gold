@@ -138,9 +138,9 @@
     "semantic_hash": ""
   },
   "src/main.ts": {
-    "mtime": 1792430385.8217185,
-    "seen": 1792431753.744239,
-    "ast_hash": "99d4a1aac5859dbedef712bc7b0e68e6",
+    "mtime": 1792432944.306719,
+    "seen": 1792433261.929379,
+    "ast_hash": "8a06a194810c7c9802ff1088e5428bc1",
     "semantic_hash": ""
   },
   "src/meta/profile.ts": {
@@ -186,9 +186,9 @@
     "semantic_hash": ""
   },
   "src/render/MapLayers.ts": {
-    "mtime": 1792431356.7812724,
-    "seen": 1792431753.744245,
-    "ast_hash": "1d92872f4d67af68303430d091c4f299",
+    "mtime": 1792433033.9075832,
+    "seen": 1792433261.929387,
+    "ast_hash": "819fbc15d0246138a7bde5939da1da02",
     "semantic_hash": ""
   },
   "src/render/Overlays.ts": {
@@ -204,9 +204,9 @@
     "semantic_hash": ""
   },
   "src/render/World3D.ts": {
-    "mtime": 1792428015.6869493,
-    "seen": 1792431753.744247,
-    "ast_hash": "3bd312fe430a3605ed2f4234989a5ec2",
+    "mtime": 1792433191.4972117,
+    "seen": 1792433261.929389,
+    "ast_hash": "df3ce8bb28e9b301e92a5559cb9eb0b4",
     "semantic_hash": ""
   },
   "src/render/fx/Effects.ts": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "src/render/terrain/Terrain.ts": {
-    "mtime": 1792431678.6728184,
-    "seen": 1792431753.7442508,
-    "ast_hash": "fbc67540e4c32fef30eafd2dfd8ced96",
+    "mtime": 1792433145.0447717,
+    "seen": 1792433261.929395,
+    "ast_hash": "c162766d554f034cb6dccf2325c9b735",
     "semantic_hash": ""
   },
   "src/render/terrain/TileSource.ts": {
@@ -420,15 +420,15 @@
     "semantic_hash": ""
   },
   "src/ui/menus/MenuMap.ts": {
-    "mtime": 1792430371.973363,
-    "seen": 1792431753.744274,
-    "ast_hash": "a36fd41d2c5a8c5c266a02c3102b8783",
+    "mtime": 1792433033.9072723,
+    "seen": 1792433261.9294221,
+    "ast_hash": "d7b8a17edd6118008b3eb29fdfb3a14e",
     "semantic_hash": ""
   },
   "src/ui/menus/Menus.ts": {
-    "mtime": 1792430168.1738837,
-    "seen": 1792431753.744274,
-    "ast_hash": "eed1233f2a494fecc41c2a8b27c7bc3a",
+    "mtime": 1792432944.3071568,
+    "seen": 1792433261.929423,
+    "ast_hash": "2dcecfb09778158c70406a60f2f43005",
     "semantic_hash": ""
   },
   "src/ui/thumbs.ts": {
