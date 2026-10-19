@@ -14,10 +14,16 @@
   "dependencies": {
     "@fontsource/rajdhani": "5.1.0",
     "@fontsource/vazirmatn": "5.1.0",
+    "peerjs": "^1.5.4",
+    "postprocessing": "^6.36.4",
     "three": "0.170.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "@types/three": "0.170.0",
+    "playwright-core": "^1.48.2",
+    "sharp": "^0.33.5",
+    "tsx": "^4.19.2",
     "typescript": "5.7.2",
     "vite": "6.0.7",
     "vitest": "2.1.8"

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#05080c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href="https://blackgold.vercel.app/" />
+    <title>Black Gold — Theater of War (Play)</title>
+    <meta name="description" content="Play Black Gold: a real-time strategy war across the real Middle East — drones, missiles, diplomacy and multiplayer in your browser." />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="preload" href="/data/theater.bin.gz" as="fetch" crossorigin />
+  </head>
+  <body>
+    <canvas id="game-canvas" tabindex="0" aria-label="Battlefield"></canvas>
+    <div id="ui-root"></div>
+    <div id="boot-splash">
+      <div class="boot-logo">BLACK GOLD</div>
+      <div class="boot-sub">THEATER OF WAR</div>
+      <div class="boot-bar"><div class="boot-fill"></div></div>
+      <div class="boot-status"></div>
+    </div>
+    <noscript>Black Gold requires JavaScript and WebGL.</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

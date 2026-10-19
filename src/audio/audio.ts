@@ -1,4 +1,4 @@
-import type { SfxName } from '../game/config';
+import type { SfxName } from '../sim/defs';
 
 /**
  * Fully procedural audio (no asset downloads): Web Audio synthesized SFX, wind ambience,
@@ -11,6 +11,8 @@ export class AudioEngine {
   private music!: GainNode;
   private ambience!: GainNode;
   private comp!: DynamicsCompressorNode;
+  private reverb!: ConvolverNode;
+  private reverbSend!: GainNode;
   private noise!: AudioBuffer;
   private lastPlayed = new Map<string, number>();
   private windGain: GainNode | null = null;
@@ -40,6 +42,18 @@ export class AudioEngine {
     this.music = ctx.createGain();
     this.ambience = ctx.createGain();
     this.sfx.connect(this.comp);
+    // Synthetic hall/desert reverb: decaying stereo noise impulse.
+    this.reverb = ctx.createConvolver();
+    const irLen = Math.floor(ctx.sampleRate * 2.2);
+    const ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const data = ir.getChannelData(ch);
+      for (let i = 0; i < irLen; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3.2);
+    }
+    this.reverb.buffer = ir;
+    this.reverbSend = ctx.createGain();
+    this.reverbSend.gain.value = 0.22;
+    this.reverbSend.connect(this.reverb).connect(this.comp);
     this.music.connect(this.comp);
     this.ambience.connect(this.comp);
     this.comp.connect(this.master);
@@ -79,13 +93,20 @@ export class AudioEngine {
     if (now - last < minGap) return;
     this.lastPlayed.set(name, now);
     const dist = opts.distance ?? 0;
-    const vol = (opts.volume ?? 1) * Math.max(0, 1 - dist / 160) ** 1.6;
+    const vol = (opts.volume ?? 1) * Math.max(0, 1 - dist) ** 1.6;
     if (vol < 0.02) return;
     const out = ctx.createGain();
     out.gain.value = vol;
     const panner = ctx.createStereoPanner();
     panner.pan.value = Math.max(-1, Math.min(1, opts.pan ?? 0));
-    out.connect(panner).connect(this.sfx);
+    // Distant sounds lose their highs; everything gets a touch of reverb (more when far).
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 18000 * Math.pow(1 - Math.min(0.95, dist), 2) + 400;
+    out.connect(lp).connect(panner).connect(this.sfx);
+    const send = ctx.createGain();
+    send.gain.value = 0.3 + dist * 0.7;
+    panner.connect(send).connect(this.reverbSend);
     SYNTHS[name]?.(this, out, now);
   }
 
@@ -279,6 +300,14 @@ const SEMI = (n: number) => Math.pow(2, n / 12);
 const HIJAZ = [-5, -4, -2, 0, 1, 4, 5, 7, 8, 10, 12, 13, 16, 17, 19].map(SEMI);
 
 const THROTTLE: Partial<Record<SfxName, number>> = {
+  autocannon: 0.1,
+  flak: 0.25,
+  jet: 2.5,
+  drone: 1.5,
+  shahed: 2,
+  heli: 0.8,
+  sam: 0.12,
+  atgm: 0.1,
   rifle: 0.05,
   mg: 0.07,
   cannon: 0.08,
@@ -304,11 +333,75 @@ const SYNTHS: Record<SfxName, Synth> = {
     a.noiseBurst(o, t, 0.5, { type: 'lowpass', freq: 1800, freqEnd: 200, gain: 0.7 });
   },
   rocket: (a, o, t) => {
-    a.noiseBurst(o, t, 0.6, { type: 'bandpass', freq: 600, freqEnd: 2600, q: 1.2, gain: 0.45, attack: 0.03 });
+    for (let i = 0; i < 3; i++) a.noiseBurst(o, t + i * 0.18, 0.7, { type: 'bandpass', freq: 500, freqEnd: 2600, q: 1.2, gain: 0.42, attack: 0.03 });
   },
-  missile: (a, o, t) => {
-    a.noiseBurst(o, t, 0.9, { type: 'bandpass', freq: 900, freqEnd: 3400, q: 1.5, gain: 0.45, attack: 0.05 });
-    a.tone(o, t, 0.6, { type: 'sawtooth', freq: 300, freqEnd: 900, gain: 0.05 });
+  autocannon: (a, o, t) => {
+    for (let i = 0; i < 3; i++) {
+      a.tone(o, t + i * 0.11, 0.12, { freq: 160, freqEnd: 70, gain: 0.35 });
+      a.noiseBurst(o, t + i * 0.11, 0.12, { type: 'bandpass', freq: 1100, q: 0.8, gain: 0.35 });
+    }
+  },
+  atgm: (a, o, t) => {
+    a.noiseBurst(o, t, 0.12, { type: 'lowpass', freq: 900, gain: 0.5 });
+    a.noiseBurst(o, t + 0.05, 1.1, { type: 'bandpass', freq: 1400, freqEnd: 2800, q: 2, gain: 0.3, attack: 0.08 });
+  },
+  sam: (a, o, t) => {
+    a.noiseBurst(o, t, 1.4, { type: 'bandpass', freq: 700, freqEnd: 3600, q: 1.4, gain: 0.55, attack: 0.04 });
+    a.tone(o, t, 0.9, { type: 'sawtooth', freq: 220, freqEnd: 700, gain: 0.05 });
+  },
+  flak: (a, o, t) => {
+    // C-RAM / CIWS "brrrt": very fast burst
+    a.noiseBurst(o, t, 0.45, { type: 'bandpass', freq: 900, q: 0.6, gain: 0.45, attack: 0.01 });
+    a.tone(o, t, 0.45, { type: 'sawtooth', freq: 75, gain: 0.2 });
+  },
+  laser: (a, o, t) => {
+    a.tone(o, t, 0.5, { type: 'sine', freq: 2400, freqEnd: 1800, gain: 0.08 });
+    a.noiseBurst(o, t, 0.4, { type: 'highpass', freq: 5000, gain: 0.1 });
+  },
+  torpedo: (a, o, t) => {
+    a.noiseBurst(o, t, 1.2, { type: 'lowpass', freq: 500, freqEnd: 200, gain: 0.4, attack: 0.1 });
+  },
+  jet: (a, o, t) => {
+    a.noiseBurst(o, t, 3.2, { type: 'bandpass', freq: 400, freqEnd: 2200, q: 0.5, gain: 0.55, attack: 1.0 });
+    a.noiseBurst(o, t + 1.4, 2.2, { type: 'lowpass', freq: 900, freqEnd: 150, gain: 0.5, attack: 0.2 });
+  },
+  drone: (a, o, t) => {
+    a.tone(o, t, 1.2, { type: 'sawtooth', freq: 180, freqEnd: 200, gain: 0.05, attack: 0.2 });
+    a.tone(o, t, 1.2, { type: 'sawtooth', freq: 272, gain: 0.03, attack: 0.2 });
+  },
+  shahed: (a, o, t) => {
+    // Two-stroke "moped" drone engine.
+    const ctx = a.ctx!;
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(95, t);
+    const am = ctx.createOscillator();
+    am.frequency.value = 38;
+    const amg = ctx.createGain();
+    amg.gain.value = 0.04;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.07, t + 0.5);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 2.6);
+    am.connect(amg).connect(g.gain);
+    const f = ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.value = 1200;
+    osc.connect(f).connect(g).connect(o);
+    osc.start(t);
+    am.start(t);
+    osc.stop(t + 2.7);
+    am.stop(t + 2.7);
+  },
+  heli: (a, o, t) => {
+    for (let i = 0; i < 8; i++) a.noiseBurst(o, t + i * 0.09, 0.08, { type: 'lowpass', freq: 300, gain: 0.35 });
+  },
+  diplomacy: (a, o, t) => {
+    [587, 740, 880].forEach((f, i) => a.tone(o, t + i * 0.12, 0.7, { type: 'sine', freq: f, gain: 0.12 }));
+  },
+  war: (a, o, t) => {
+    for (let i = 0; i < 3; i++) a.tone(o, t + i * 0.32, 0.6, { freq: 70, freqEnd: 40, gain: 0.7 });
+    a.tone(o, t + 1.0, 1.4, { type: 'sawtooth', freq: 147, gain: 0.08, attack: 0.1 });
   },
   artillery: (a, o, t) => {
     for (let i = 0; i < 6; i++) a.noiseBurst(o, t + i * 0.12, 0.5, { type: 'bandpass', freq: 500, freqEnd: 2000, q: 1, gain: 0.35, attack: 0.02 });

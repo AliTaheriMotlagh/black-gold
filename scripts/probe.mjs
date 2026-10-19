@@ -1,0 +1,10 @@
+import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ channel: 'chrome', args: ['--use-angle=metal', '--ignore-gpu-blocklist'] });
+const page = await browser.newPage({ viewport: { width: 1200, height: 800 } });
+page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+page.on('console', (m) => { if (m.type() === 'error') console.log('[console.error]', m.text()); });
+await page.goto(process.argv[2]);
+await page.waitForTimeout(6000);
+const r = await page.evaluate(process.argv[3]);
+console.log(JSON.stringify(r));
+await browser.close();

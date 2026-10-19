@@ -11,7 +11,7 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "types": ["vite/client"]
+    "types": ["vite/client", "node"]
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "scripts"]
 }

@@ -1,6 +1,6 @@
 import { en, type I18nKey } from './en';
 import { fa } from './fa';
-import type { Localized } from '../geo/geography';
+import type { Localized } from '../geo/theater';
 
 export type Lang = 'en' | 'fa';
 export type { I18nKey };
@@ -43,6 +43,23 @@ const enFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 })
 /** Locale-aware integer formatting (Persian digits in Farsi). */
 export function num(n: number): string {
   return (current === 'fa' ? faFormatter : enFormatter).format(Math.floor(n));
+}
+
+const faDec = new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 1 });
+const enDec = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+
+/** Compact number: 1.2K, 3.4M (localized digits). */
+export function compact(n: number): string {
+  const f = current === 'fa' ? faDec : enDec;
+  const a = Math.abs(n);
+  if (a >= 1e6) return f.format(n / 1e6) + (current === 'fa' ? 'م' : 'M');
+  if (a >= 1e4) return f.format(n / 1e3) + (current === 'fa' ? 'ه' : 'K');
+  return num(n);
+}
+
+/** Localize a string containing ASCII digits. */
+export function digits(s: string): string {
+  return current === 'fa' ? s.replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[+d]) : s;
 }
 
 export function fmtTime(seconds: number): string {

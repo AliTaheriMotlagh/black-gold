@@ -2,24 +2,191 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#120d08" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="description" content="Black Gold: Sands of War — 3D real-time strategy across a real map of the Middle East." />
-    <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
-    <link rel="apple-touch-icon" href="./icon.svg" />
-    <title>Black Gold: Sands of War</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Black Gold — Real-Time Strategy on the Real Middle East Map | Play Free</title>
+    <meta name="description" content="Lead a real nation in a 3D real-time strategy war across the real Middle East. Drones, missiles, air defence, diplomacy and multiplayer — free in your browser on desktop and mobile." />
+    <meta name="keywords" content="real-time strategy, RTS, browser game, war game, Middle East map, drone warfare, missile defense, multiplayer strategy, Generals, Age of Empires, free online strategy game" />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+    <link rel="alternate" hreflang="en" href="%VITE_SITE_URL%/" />
+    <link rel="alternate" hreflang="fa" href="%VITE_SITE_URL%/fa/" />
+    <link rel="alternate" hreflang="x-default" href="%VITE_SITE_URL%/" />
+    <meta name="theme-color" content="#05080c" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Black Gold" />
+    <meta property="og:title" content="Black Gold — Command a nation in a real-time war across the real Middle East" />
+    <meta property="og:description" content="3D RTS on real satellite terrain: drones, missiles, air defence, diplomacy and peer-to-peer multiplayer. Free in your browser." />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Tanks and attack helicopters battling over real satellite terrain in Black Gold" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="fa_IR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Black Gold — Real-Time Strategy on the Real Middle East" />
+    <meta name="twitter:description" content="Drones, missiles, diplomacy and multiplayer on real satellite terrain. Play free in your browser." />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.jpg" />
+
+    <link rel="preload" as="image" href="/media/battle.webp" fetchpriority="high" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Black Gold: Theater of War",
+        "alternateName": "طلای سیاه",
+        "url": "%VITE_SITE_URL%/",
+        "image": "%VITE_SITE_URL%/og-image.jpg",
+        "screenshot": ["%VITE_SITE_URL%/media/battle-hud.webp", "%VITE_SITE_URL%/media/strategic.webp", "%VITE_SITE_URL%/media/diplomacy.webp"],
+        "description": "A 3D real-time strategy game played on the real map of the Middle East with modern drones, missiles, air defence, diplomacy and peer-to-peer multiplayer.",
+        "genre": ["Real-time strategy", "War", "Simulation"],
+        "gamePlatform": ["Web browser", "Desktop", "Mobile"],
+        "operatingSystem": "Any (WebGL2 browser)",
+        "applicationCategory": "Game",
+        "playMode": ["SinglePlayer", "MultiPlayer"],
+        "numberOfPlayers": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 8 },
+        "inLanguage": ["en", "fa"],
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is Black Gold free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. It runs free in any modern browser with no download or account." } },
+          { "@type": "Question", "name": "Does it work on phones and tablets?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The interface adapts to touch with tap-to-command, pinch zoom, twist rotation and long-press box selection. Landscape is recommended on phones." } },
+          { "@type": "Question", "name": "Is the map real?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Terrain is built from real elevation data and satellite imagery; borders, cities, roads, rivers and oil fields come from open geographic datasets." } },
+          { "@type": "Question", "name": "How does multiplayer work?", "acceptedAnswer": { "@type": "Answer", "text": "One player hosts and shares a six-letter room code or link. Players connect peer-to-peer and each commands a real nation; the simulation runs in deterministic lockstep so every player sees the same war." } },
+          { "@type": "Question", "name": "Can I play in Farsi?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The whole game is available in English and Farsi with a full right-to-left interface." } }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <canvas id="game-canvas"></canvas>
-    <div id="ui-root"></div>
-    <div id="boot-splash">
-      <div class="boot-logo">BLACK GOLD</div>
-      <div class="boot-bar"><div class="boot-fill"></div></div>
-    </div>
-    <script type="module" src="/src/main.ts"></script>
+    <header class="nav">
+      <a class="brand" href="/" aria-label="Black Gold home"><img src="/icon.svg" width="32" height="32" alt="" /><span>BLACK GOLD</span></a>
+      <nav aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#arsenal">Arsenal</a>
+        <a href="#multiplayer">Multiplayer</a>
+        <a href="#faq">FAQ</a>
+        <a href="/fa/" hreflang="fa" lang="fa">فارسی</a>
+      </nav>
+      <a class="btn gold small" href="/play/">Play free</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <img class="hero-bg" src="/media/battle.webp" alt="Main battle tanks and attack helicopters fighting over real satellite terrain" width="1600" height="900" fetchpriority="high" />
+        <div class="hero-content">
+          <p class="eyebrow">Real-time strategy · Real Middle East</p>
+          <h1>Command a nation.<br />Win the war — or the peace.</h1>
+          <p class="lead">A 3D RTS on real satellite terrain. Build your base, pump real oil fields, research hypersonic missiles and laser defence, send drone swarms — and navigate alliances, sanctions and world opinion.</p>
+          <div class="cta">
+            <a class="btn gold" href="/play/">▶ Play free in your browser</a>
+            <a class="btn ghost" href="#features">See features</a>
+          </div>
+          <ul class="badges">
+            <li>No download</li>
+            <li>Desktop · Tablet · Phone</li>
+            <li>Multiplayer (P2P)</li>
+            <li>English · فارسی</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <article class="feature">
+          <img src="/media/strategic.webp" alt="Strategic map of Iran, Iraq and the Persian Gulf with NATO unit symbols and territorial control" width="1600" height="900" loading="lazy" />
+          <div>
+            <h2>The real map, at real scale</h2>
+            <p>Fight across 4,000 km of the real Middle East — from the Nile to the Caspian, the Bosphorus to the Gulf of Aden. Real elevation, Sentinel-2 satellite imagery, 41 nations, 150 cities with real populations, roads, rivers and 37 real oil and gas fields.</p>
+            <ul>
+              <li>Zoom from a single tank to the whole theater; units become NATO-style symbols on the strategic map.</li>
+              <li>Distances are real: armies road-march in convoys and deploy at the front.</li>
+              <li>Capture cities and the border moves with you.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="feature reverse">
+          <img src="/media/battle-hud.webp" alt="Tank battle with tracers, smoke and health bars" width="1600" height="900" loading="lazy" />
+          <div>
+            <h2>Modern warfare, modelled</h2>
+            <p>24 units and 19 structures built around today's battlefield: FPV kamikaze drones, Shahed-style loitering munitions, armed MALE drones, MLRS, long-range SAMs that intercept ballistic missiles, C-RAM, electronic warfare, laser air defence, stealth bombers, frigates and submarines.</p>
+            <ul>
+              <li>Real projectile physics: lead-predicted shells, ballistic arcs, guided missiles with proximity fuses.</li>
+              <li>Every rocket, cruise and ballistic missile can be intercepted — or saturate your defences.</li>
+              <li>Artillery needs spotters; jets fly sorties and return to rearm.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="/media/diplomacy.webp" alt="Diplomacy screen with relations, tension and treaties" width="1600" height="900" loading="lazy" />
+          <div>
+            <h2>Diplomacy that matters</h2>
+            <p>Each player is a real country. Start from real 2025 alignments — the GCC, the Abraham Accords, Iran–Israel hostility — or from a clean slate. Your forces only fire on nations you are at war with.</p>
+            <ul>
+              <li>Declare war with or without a casus belli — world opinion is watching.</li>
+              <li>Alliances, non-aggression pacts, trade deals, military access and sanctions.</li>
+              <li>Stability, war weariness and UN sanctions shape your economy.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="feature reverse">
+          <img src="/media/base.webp" alt="A military base with refineries, power plant and war factory" width="1600" height="900" loading="lazy" />
+          <div>
+            <h2>Build, pump, research, promote</h2>
+            <p>Classic RTS depth in the tradition of Command &amp; Conquer: Generals and Age of Empires. Engineering vehicles build your base, oil sells on a live market, tech levels unlock new arsenals, and promotions grant General's powers like drone swarms, EMP and cyber attacks.</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="arsenal" class="arsenal">
+        <h2>The arsenal</h2>
+        <div class="grid">
+          <div><h3>Infantry</h3><p>Rifle squads · ATGM teams · MANPADS · Combat engineers · Special forces</p></div>
+          <div><h3>Armour &amp; artillery</h3><p>Main battle tanks · IFVs · Self-propelled howitzers · MLRS</p></div>
+          <div><h3>Air defence</h3><p>SHORAD · Long-range SAM / ABM · C-RAM · Laser · Radar · EW jammers</p></div>
+          <div><h3>Drones</h3><p>FPV kamikaze · Recon UAV · Loitering munitions · Armed MALE drones</p></div>
+          <div><h3>Air &amp; sea</h3><p>Attack helicopters · Multirole fighters · Stealth bombers · Fast attack craft · Frigates · Submarines</p></div>
+          <div><h3>Strategic strikes</h3><p>Cruise missiles · Ballistic missiles · Hypersonic glide vehicles · Missile TELs</p></div>
+        </div>
+      </section>
+
+      <section id="multiplayer" class="mp">
+        <div>
+          <h2>Multiplayer with friends — no account</h2>
+          <p>Host a war and share a six-letter code. Up to eight commanders connect peer-to-peer, each leading a real nation, with AI powers filling the map. The deterministic lockstep simulation keeps every player's war identical, with automatic desync detection, and the AI takes over if someone drops.</p>
+          <a class="btn gold" href="/play/">Host a game</a>
+        </div>
+        <img src="/media/mobile.webp" alt="Black Gold running on a phone in landscape" width="844" height="390" loading="lazy" />
+      </section>
+
+      <section id="faq" class="faq">
+        <h2>FAQ</h2>
+        <details open><summary>Is Black Gold free?</summary><p>Yes. It runs free in any modern browser with no download or account.</p></details>
+        <details><summary>Does it work on phones and tablets?</summary><p>Yes. Tap to select and command, drag to pan, pinch to zoom, twist to rotate and long-press to box-select. Landscape is recommended on phones. You can also install it as an app from your browser.</p></details>
+        <details><summary>Is the map real?</summary><p>Yes. Terrain comes from real elevation data and satellite imagery; borders, cities, roads, rivers and oil fields come from open geographic datasets (Natural Earth, NASA, Copernicus Sentinel-2, AWS Terrain Tiles).</p></details>
+        <details><summary>How does multiplayer work?</summary><p>One player hosts and shares a code or link. Players connect directly (WebRTC). Every peer runs the same deterministic simulation in lockstep, so all commanders see exactly the same war.</p></details>
+        <details><summary>Can I play in Farsi?</summary><p>Yes — the whole game is available in English and Farsi with a full right-to-left interface. <a href="/fa/" hreflang="fa">نسخه فارسی</a></p></details>
+      </section>
+
+      <section class="final-cta">
+        <h2>The theater is waiting.</h2>
+        <a class="btn gold" href="/play/">▶ Play Black Gold</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>© Black Gold. A work of fiction for entertainment; no endorsement of any government or conflict is implied.</p>
+      <p class="attrib">Imagery: Sentinel-2 cloudless by EOX IT Services (contains modified Copernicus Sentinel data, CC BY-NC-SA 4.0) · NASA Blue Marble · Elevation: AWS Terrain Tiles · Borders, cities, roads: Natural Earth.</p>
+    </footer>
+    <script type="module" src="/src/landing/landing.ts"></script>
   </body>
 </html>

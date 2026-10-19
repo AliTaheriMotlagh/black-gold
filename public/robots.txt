@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /play/
+
+Sitemap: https://SITE_URL_PLACEHOLDER/sitemap.xml

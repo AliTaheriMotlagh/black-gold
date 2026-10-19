@@ -1,14 +1,26 @@
 {
-  "name": "Black Gold: Sands of War",
+  "id": "/play/",
+  "name": "Black Gold — Theater of War",
   "short_name": "Black Gold",
-  "description": "3D real-time strategy across the Middle East — oil, rockets and empires.",
-  "start_url": "./",
-  "scope": "./",
+  "description": "Real-time strategy war across the real Middle East: drones, missiles, diplomacy and multiplayer.",
+  "lang": "en",
+  "start_url": "/play/?source=pwa",
+  "scope": "/",
   "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
   "orientation": "landscape",
-  "background_color": "#120d08",
-  "theme_color": "#120d08",
+  "background_color": "#05080c",
+  "theme_color": "#05080c",
+  "categories": ["games", "entertainment"],
   "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "screenshots": [
+    { "src": "/media/battle-hud.webp", "sizes": "1600x900", "type": "image/webp", "form_factor": "wide", "label": "Tank battle on real terrain" },
+    { "src": "/media/strategic.webp", "sizes": "1600x900", "type": "image/webp", "form_factor": "wide", "label": "Strategic map" },
+    { "src": "/media/mobile.webp", "sizes": "1688x780", "type": "image/webp", "label": "Mobile" }
   ]
 }
