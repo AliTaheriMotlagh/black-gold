@@ -1,0 +1,25 @@
+{
+  "name": "black-gold-rts",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Black Gold: Sands of War — a mobile-friendly 3D real-time strategy game set in the Middle East.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fontsource/rajdhani": "5.1.0",
+    "@fontsource/vazirmatn": "5.1.0",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.170.0",
+    "typescript": "5.7.2",
+    "vite": "6.0.7",
+    "vitest": "2.1.8"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Black Gold: Sands of War",
+  "short_name": "Black Gold",
+  "description": "3D real-time strategy across the Middle East — oil, rockets and empires.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#120d08",
+  "theme_color": "#120d08",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
