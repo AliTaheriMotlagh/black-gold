@@ -43,3 +43,4 @@ use, switch the default imagery to `gibs` in `src/meta/settings.ts` and `src/ren
 or license EOX. Vector data: Natural Earth (public domain).
 
 This is a work of fiction for entertainment and implies no endorsement of any government or conflict.
+
