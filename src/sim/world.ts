@@ -415,6 +415,8 @@ export class World {
     if (c.funds < def.cost) return 'noFunds';
     if (c.oil < def.oil) return 'noOil';
     if (!this.canPlaceFootprint(owner, kind, x, z)) return 'cantBuild';
+    // Offshore wells can only be worked from a naval base; without one the derrick never gets crew.
+    if (def.onOil && this.oilFieldAt(x, z)?.offshore && !this.hasBuilding(owner, 'shipyard')) return 'requires';
     if (!def.onOil && kind !== 'fob' && kind !== 'hq') {
       let ok = false;
       for (const b of this.buildings) {

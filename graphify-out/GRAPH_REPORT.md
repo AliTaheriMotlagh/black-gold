@@ -1,17 +1,17 @@
 # Graph Report - bazi  (2026-10-19)
 
 ## Corpus Check
-- 79 files · ~192,911 words
+- 79 files · ~192,939 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 8 file(s) not represented in the graph (top: (none) 3, .css 2, .graphify-bak 1)
 
 ## Summary
-- 1201 nodes · 3486 edges · 57 communities (38 shown, 19 thin omitted)
+- 1201 nodes · 3488 edges · 60 communities (41 shown, 19 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 328 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a6281da0`
+- Built from commit: `fb727258`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,15 +23,15 @@
 - index.ts
 - sim.test.ts
 - commands.ts
-- entities.ts
+- defs.ts
 - main.ts
-- world.ts
+- economy.ts
 - Game
 - t
-- defs.ts
-- movement.ts
+- ai.ts
+- combat.ts
 - World
-- sin
+- world.ts
 - Architecture (where things live)
 - Pathfinder
 - .overlays
@@ -70,6 +70,9 @@
 - scripts
 - vercel.json
 - Transport
+- .constructor
+- movement.ts
+- Diplomacy
 - vite.config.ts
 
 ## God Nodes (most connected - your core abstractions)
@@ -99,7 +102,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (57 total, 19 thin omitted)
+## Communities (60 total, 19 thin omitted)
 
 ### Community 0 - "Controller"
 Cohesion: 0.09
@@ -118,7 +121,7 @@ Cohesion: 0.11
 Nodes (8): visAlt(), Effects, mergeSimple(), radialTexture(), COL, Layer, Particles, rs()
 
 ### Community 4 - "index.ts"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (30): audio, HIJAZ, Synth, SYNTHS, THROTTLE, en, I18nKey, fa (+22 more)
 
 ### Community 5 - "sim.test.ts"
@@ -127,19 +130,19 @@ Nodes (13): vitest, theater, w, counts, minutes, seed, t0, theater (+5 more)
 
 ### Community 6 - "commands.ts"
 Cohesion: 0.16
-Nodes (29): applyCommand(), build(), fail(), ownUnits(), train(), ProposalKind, aiAccepts(), BLOCS (+21 more)
+Nodes (26): applyCommand(), build(), fail(), ownUnits(), train(), aiAccepts(), applyScenario(), BLOCS (+18 more)
 
-### Community 7 - "entities.ts"
-Cohesion: 0.09
-Nodes (13): BuildingDef, StrikeKind, UnitDef, WeaponDef, Building, EntityBase, OrderType, Projectile (+5 more)
+### Community 7 - "defs.ts"
+Cohesion: 0.06
+Nodes (30): Armor, BuildingDef, buildingList, DAMAGE, Domain, Flight, PowerDef, ResearchDef (+22 more)
 
 ### Community 8 - "main.ts"
 Cohesion: 0.05
 Nodes (36): loadTheater(), detectLang(), Lang, setLang(), App, State, AchievementId, ACHIEVEMENTS (+28 more)
 
-### Community 9 - "world.ts"
-Cohesion: 0.09
-Nodes (33): Command, Controller, Country, CountryStats, Proposal, Rel, Alliance, Hostile (+25 more)
+### Community 9 - "economy.ts"
+Cohesion: 0.11
+Nodes (21): Controller, CountryStats, Proposal, ProposalKind, Rel, Alliance, Hostile, Neutral (+13 more)
 
 ### Community 10 - "Game"
 Cohesion: 0.14
@@ -149,29 +152,25 @@ Nodes (3): Game, HUD, Minimap
 Cohesion: 0.31
 Nodes (6): getLang(), t(), rankOf(), rankProgress(), h(), Menus
 
-### Community 12 - "defs.ts"
-Cohesion: 0.08
-Nodes (26): AGGRESSION, ATTACK_SIZE, MIX, Armor, buildingList, BUILDINGS, DAMAGE, Domain (+18 more)
+### Community 12 - "ai.ts"
+Cohesion: 0.18
+Nodes (18): AGGRESSION, ATTACK_SIZE, MIX, BUILDINGS, POWERS, RESEARCH, STRIKES, TIER_UPGRADE (+10 more)
 
-### Community 13 - "movement.ts"
-Cohesion: 0.10
-Nodes (43): angleDiff(), atan(), atan2(), dist2(), HALF_PI, headingTo(), PI, sinPoly() (+35 more)
+### Community 13 - "combat.ts"
+Cohesion: 0.14
+Nodes (27): angleDiff(), atan(), atan2(), dist2(), HALF_PI, headingTo(), PI, sinPoly() (+19 more)
 
 ### Community 14 - "World"
-Cohesion: 0.09
-Nodes (6): Diplomacy, City, OilField, applyScenario(), Crises, World
+Cohesion: 0.17
+Nodes (4): Country, OilField, spawnFrom(), World
 
-### Community 15 - "sin"
-Cohesion: 0.39
-Nodes (8): T_MUNITION, cos(), sin(), moveUnits(), blankShell(), offmapBomb(), offmapShell(), usePower()
+### Community 15 - "world.ts"
+Cohesion: 0.14
+Nodes (12): Command, DT, ECON, sqrt, Unit, SpatialHash, updatePowers(), captureCity() (+4 more)
 
 ### Community 16 - "Architecture (where things live)"
 Cohesion: 0.15
 Nodes (11): Architecture (where things live), Black Gold — Theater of War, Commands, Debugging, graphify, Hard rules, Token-efficient workflow, Architecture (+3 more)
-
-### Community 17 - "Pathfinder"
-Cohesion: 0.09
-Nodes (5): Pathfinder, PathGrid, Rng, Market, spawnFrom()
 
 ### Community 19 - "Game.ts"
 Cohesion: 0.12
@@ -198,7 +197,7 @@ Cohesion: 0.14
 Nodes (13): Anim, CAMO, FIXED, GLOW, ModelPart, tmpE, tmpM, tmpQ (+5 more)
 
 ### Community 28 - "projectiles.ts"
-Cohesion: 0.23
+Cohesion: 0.22
 Nodes (20): Delivery, clamp(), dist(), aimY(), arcPos(), baseProjectile(), destroyThreat(), fireWeapon() (+12 more)
 
 ### Community 30 - "package.json"
@@ -221,6 +220,10 @@ Nodes (14): compilerOptions, isolatedModules, lib, module, moduleResolution, noE
 Cohesion: 0.18
 Nodes (9): CityMeta, CountryMeta, COVER_SPEED, FLAG_COAST, FLAG_RIVER, FLAG_ROAD, Localized, OilMeta (+1 more)
 
+### Community 40 - "loc"
+Cohesion: 0.33
+Nodes (3): loc(), strength(), DiplomacyPanel
+
 ### Community 41 - "marketing-shots.mjs"
 Cohesion: 0.20
 Nodes (3): sharp, svg, overlay
@@ -232,6 +235,10 @@ Nodes (10): BUILD_ORDER, BLOC_ALLIES, BLOC_RIVALS, countryOil(), countryPop(), D
 ### Community 43 - "EntityRenderer.ts"
 Cohesion: 0.16
 Nodes (12): _c, _e, _m, _p, _q, _s, _v, Wreck (+4 more)
+
+### Community 46 - "num"
+Cohesion: 0.44
+Nodes (3): num(), SelectionPanel, thumb()
 
 ### Community 48 - "mp-test.mjs"
 Cohesion: 0.17
@@ -253,6 +260,14 @@ Nodes (6): scripts, build, dev, preview, test, typecheck
 Cohesion: 0.25
 Nodes (7): buildCommand, cleanUrls, framework, headers, outputDirectory, $schema, trailingSlash
 
+### Community 54 - ".constructor"
+Cohesion: 0.13
+Nodes (4): City, Rng, Crises, Market
+
+### Community 55 - "movement.ts"
+Cohesion: 0.22
+Nodes (16): PathRequest, clampWorld(), dockedUpdate(), finishPath(), homeBase(), moveAir(), moveSurface(), PathJob (+8 more)
+
 ## Knowledge Gaps
 - **20 isolated node(s):** `@types/node`, `@types/three`, `tsx`, `typescript`, `Sea` (+15 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 296 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
@@ -261,7 +276,7 @@ Nodes (7): buildCommand, cleanUrls, framework, headers, outputDirectory, $schema
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `World` connect `World` to `Theater`, `Particles`, `sim.test.ts`, `commands.ts`, `entities.ts`, `main.ts`, `world.ts`, `Game`, `defs.ts`, `movement.ts`, `sin`, `Pathfinder`, `Game.ts`, `Controller.ts`, `LobbyHost`, `AIController`, `projectiles.ts`, `Vision`, `LobbyClient`, `LockstepSession`, `EntityRenderer.ts`, `MapLayers`?**
+- **Why does `World` connect `World` to `Theater`, `Particles`, `sim.test.ts`, `commands.ts`, `defs.ts`, `main.ts`, `economy.ts`, `Game`, `ai.ts`, `combat.ts`, `world.ts`, `Pathfinder`, `Game.ts`, `Controller.ts`, `LobbyHost`, `AIController`, `projectiles.ts`, `Vision`, `LobbyClient`, `LockstepSession`, `EntityRenderer.ts`, `MapLayers`, `.constructor`, `movement.ts`, `Diplomacy`?**
   _High betweenness centrality (0.118) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `applyCommand()` (e.g. with `.allied()` and `.get()`) actually correct?**
   _`applyCommand()` has 6 INFERRED edges - model-reasoned connections that need verification._
@@ -273,5 +288,5 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.058) - this node is a cross-community bridge._
 - **Should `Theater` be split into smaller, more focused modules?**
   _Cohesion score 0.0701344243132671 - nodes in this community are weakly interconnected._
-- **Why does `three` connect `Controller.ts` to `Theater`, `Particles`, `index.ts`, `main.ts`, `EntityRenderer.ts`, `defs.ts`, `Game.ts`, `buildings.ts`, `units.ts`, `package.json`?**
+- **Why does `three` connect `Controller.ts` to `Theater`, `Particles`, `index.ts`, `defs.ts`, `main.ts`, `EntityRenderer.ts`, `Game.ts`, `buildings.ts`, `units.ts`, `package.json`?**
   _High betweenness centrality (0.058) - this node is a cross-community bridge._

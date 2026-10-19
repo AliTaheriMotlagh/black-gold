@@ -378,9 +378,9 @@
     "semantic_hash": ""
   },
   "src/sim/world.ts": {
-    "mtime": 1792430506.4255915,
-    "seen": 1792431753.744268,
-    "ast_hash": "ceca1cd1dc10bc649e8280425988b519",
+    "mtime": 1792434477.275496,
+    "seen": 1792434502.010546,
+    "ast_hash": "f16d3d024f22d24bc3131003a389b77f",
     "semantic_hash": ""
   },
   "src/ui/dom.ts": {
