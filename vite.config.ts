@@ -3,6 +3,9 @@ import { resolve } from 'node:path';
 import fs from 'node:fs';
 import { loadEnv, type Plugin } from 'vite';
 
+/** Production origin, used when VITE_SITE_URL is not set (e.g. Vercel, where .env* files are not deployed). */
+const PROD_SITE_URL = 'https://black-gold-war.vercel.app';
+
 /** Writes sitemap.xml and fills the site URL into robots.txt at build time. */
 function seo(site: string): Plugin {
   return {
@@ -26,26 +29,32 @@ ${urls.map((u) => `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${today}</last
   };
 }
 
-export default defineConfig(({ mode }) => ({
-  base: '/',
-  plugins: [seo(loadEnv(mode, process.cwd(), '').VITE_SITE_URL ?? 'http://localhost:5173')],
-  server: { host: true },
-  build: {
-    target: 'es2022',
-    sourcemap: false,
-    chunkSizeWarningLimit: 900,
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        play: resolve(__dirname, 'play/index.html'),
-        fa: resolve(__dirname, 'fa/index.html'),
-      },
-      output: {
-        manualChunks: {
-          three: ['three'],
-          post: ['postprocessing'],
+export default defineConfig(({ mode }) => {
+  // .env.development sets localhost for `npm run dev`; builds fall back to production.
+  // Vite resolves %VITE_SITE_URL% in index.html from process.env too, so set it here for Vercel builds.
+  const site = (loadEnv(mode, process.cwd(), '').VITE_SITE_URL || PROD_SITE_URL).replace(/\/$/, '');
+  process.env.VITE_SITE_URL = site;
+  return {
+    base: '/',
+    plugins: [seo(site)],
+    server: { host: true },
+    build: {
+      target: 'es2022',
+      sourcemap: false,
+      chunkSizeWarningLimit: 900,
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, 'index.html'),
+          play: resolve(__dirname, 'play/index.html'),
+          fa: resolve(__dirname, 'fa/index.html'),
+        },
+        output: {
+          manualChunks: {
+            three: ['three'],
+            post: ['postprocessing'],
+          },
         },
       },
     },
-  },
-}));
+  };
+});
